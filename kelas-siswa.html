@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelas & Siswa - Vezuria Academy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-image {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .logo-text h1 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+            padding: 0.2rem 0.5rem;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .logo-text p {
+            font-size: 0.65rem;
+            opacity: 0.9;
+            margin-top: 0.3rem;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        nav {
+            position: fixed;
+            top: 70px;
+            left: -100%;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 999;
+        }
+
+        nav.active {
+            left: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            flex-direction: column;
+            padding: 0.5rem 0;
+        }
+
+        nav ul li {
+            padding: 0.8rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        nav ul li:last-child {
+            border-bottom: none;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            display: block;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .hero .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        section {
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .class-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .class-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .class-header:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .class-header h3 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .class-header span {
+            font-size: 1.1rem;
+            transition: transform 0.3s;
+        }
+
+        .class-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .class-content.active {
+            max-height: 3000px;
+            padding: 1.2rem;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.6rem;
+        }
+
+        .student-item {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            padding: 0.7rem 0.9rem;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+            font-size: 0.9rem;
+            color: #555;
+            transition: all 0.3s;
+        }
+
+        .student-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .summary-section {
+            margin-top: 2rem;
+        }
+
+        .summary-box {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        .summary-box h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .summary-table {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 0.8rem 0.5rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .summary-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .summary-table thead th {
+            font-weight: 600;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background: #f5f7fa;
+        }
+
+        .total-highlight {
+            margin-top: 1rem;
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            header {
+                padding: 1.5rem 0;
+            }
+
+            .header-content {
+                padding: 0 2rem;
+            }
+
+            .logo-image {
+                width: 50px;
+                height: 50px;
+                padding: 5px;
+            }
+
+            .logo-text h1 {
+                font-size: 1.8rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .logo-text p {
+                font-size: 0.9rem;
+                margin-top: 0.5rem;
+            }
+
+            .hamburger {
+                display: none;
+            }
+
+            nav {
+                position: static;
+                width: auto;
+                background: transparent;
+                box-shadow: none;
+            }
+
+            nav ul {
+                display: flex;
+                flex-direction: row;
+                gap: 2rem;
+                padding: 0;
+            }
+
+            nav ul li {
+                padding: 0;
+                border-bottom: none;
+            }
+
+            .hero {
+                padding: 3rem 2rem;
+            }
+
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .container {
+                padding: 3rem 2rem;
+            }
+
+            section {
+                margin-bottom: 3rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+                padding: 1.5rem;
+            }
+
+            .class-section {
+                margin-bottom: 1.5rem;
+            }
+
+            .class-header {
+                padding: 1.2rem 1.5rem;
+            }
+
+            .class-header h3 {
+                font-size: 1.2rem;
+            }
+
+            .class-content.active {
+                padding: 1.5rem;
+            }
+
+            .students-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .student-item {
+                padding: 0.8rem 1rem;
+                font-size: 0.95rem;
+            }
+
+            .summary-box {
+                padding: 2rem;
+            }
+
+            .summary-box h3 {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .summary-table {
+                font-size: 1rem;
+            }
+
+            .summary-table th,
+            .summary-table td {
+                padding: 1rem;
+            }
+
+            .total-highlight {
+                font-size: 1.2rem;
+                margin-top: 1.5rem;
+            }
+
+            footer {
+                padding: 2rem;
+                margin-top: 3rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .students-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img src="ChatGPT Image Oct 27, 2025, 02_21_42 PM.png" alt="Vezuria Academy Logo" class="logo-image">
+                <div class="logo-text">
+                    <h1>🎓 Vezuria Academy</h1>
+                    <p>Membangun Generasi Cerdas dan Berkarakter</p>
+                </div>
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav id="nav-menu">
+                <ul>
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="guru.html">Struktur Guru</a></li>
+                    <li><a href="kelas-siswa.html">Kelas & Siswa</a></li>
+                    <li><a href="program.html">Program</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h2>🎓 Daftar Siswa</h2>
+        <p class="subtitle">Kelas 1, 2, dan 3</p>
+    </div>
+
+    <div class="container">
+        <section>
+            <h2>Siswa Vezuria Academy</h2>
+
+            <div class="class-section">
+                <div class="class-header" onclick="toggleClass('class1')">
+                    <h3>KELAS 1</h3>
+                    <span>▼</span>
+                </div>
+                <div class="class-content" id="class1">
+                    <div class="students-grid">
+                        <div class="student-item">1. Haruto Mizuki</div>
+                        <div class="student-item">2. Ayaka Kisaragi</div>
+                        <div class="student-item">3. Renji Sato</div>
+                        <div class="student-item">4. Airi Shion</div>
+                        <div class="student-item">5. Kaito Hoshino</div>
+                        <div class="student-item">6. Natsumi Rena</div>
+                        <div class="student-item">7. Riku Tanaka</div>
+                        <div class="student-item">8. Miyu Hanabira</div>
+                        <div class="student-item">9. Daichi Hayama Jr.</div>
+                        <div class="student-item">10. Hinata Suzume</div>
+                        <div class="student-item">11. Sora Yukimura</div>
+                        <div class="student-item">12. Mei Tachibana</div>
+                        <div class="student-item">13. Tsubasa Ren</div>
+                        <div class="student-item">14. Kana Fujimoto</div>
+                        <div class="student-item">15. Arata Nishino</div>
+                        <div class="student-item">16. Hina Kuroba</div>
+                        <div class="student-item">17. Taiga Minato</div>
+                        <div class="student-item">18. Riko Amane</div>
+                        <div class="student-item">19. Itsuki Watanabe</div>
+                        <div class="student-item">20. Aoi Kasumi</div>
+                        <div class="student-item">21. Yujiro Inoue</div>
+                        <div class="student-item">22. Sayaka Minami</div>
+                        <div class="student-item">23. Reo Aizawa</div>
+                        <div class="student-item">24. Rina Komatsu</div>
+                        <div class="student-item">25. Hiroshi Shindo</div>
+                        <div class="student-item">26. Ema Kirisaki</div>
+                        <div class="student-item">27. Keita Moriyama</div>
+                        <div class="student-item">28. Noa Hoshizaki</div>
+                        <div class="student-item">29. Yuto Kagami</div>
+                        <div class="student-item">30. Miku Serizawa</div>
+                        <div class="student-item">31. Shun Kuroda</div>
+                        <div class="student-item">32. Emi Natsukawa</div>
+                        <div class="student-item">33. Kenta Arai</div>
+                        <div class="student-item">34. Rumi Takahata</div>
+                        <div class="student-item">35. Naoki Himura</div>
+                        <div class="student-item">36. Sakura Ichinose</div>
+                        <div class="student-item">37. Toma Nishikawa</div>
+                        <div class="student-item">38. Yui Kanzaki</div>
+                        <div class="student-item">39. Sho Asahina</div>
+                        <div class="student-item">40. Ami Takahara</div>
+                        <div class="student-item">41. Junpei Onodera</div>
+                        <div class="student-item">42. Ayumi Kinoshita</div>
+                        <div class="student-item">43. Haru Fujita</div>
+                        <div class="student-item">44. Moe Shimizu</div>
+                        <div class="student-item">45. Ryohei Nagisa</div>
+                        <div class="student-item">46. Akari Hoshino</div>
+                        <div class="student-item">47. Kazuki Morita</div>
+                        <div class="student-item">48. Saki Endo</div>
+                        <div class="student-item">49. Hayato Tsukino</div>
+                        <div class="student-item">50. Nao Aihara</div>
+                        <div class="student-item">51. Rento Izumi</div>
+                        <div class="student-item">52. Chika Ayase</div>
+                        <div class="student-item">53. Yuki Hanazono</div>
+                        <div class="student-item">54. Rena Takami</div>
+                        <div class="student-item">55. Eiji Kurosawa</div>
+                        <div class="student-item">56. Haruka Yamane</div>
+                        <div class="student-item">57. Shohei Minagawa</div>
+                        <div class="student-item">58. Minori Asano</div>
+                        <div class="student-item">59. Kazuya Hino</div>
+                        <div class="student-item">60. Yume Arisaka</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class-section">
+                <div class="class-header" onclick="toggleClass('class2')">
+                    <h3>KELAS 2</h3>
+                    <span>▼</span>
+                </div>
+                <div class="class-content" id="class2">
+                    <div class="students-grid">
+                        <div class="student-item">1. Arisa Nanami</div>
+                        <div class="student-item">2. Takeru Fujinami</div>
+                        <div class="student-item">3. Mizuki Haruna</div>
+                        <div class="student-item">4. Shion Ayabane</div>
+                        <div class="student-item">5. Akito Naruse</div>
+                        <div class="student-item">6. Rin Sakurai</div>
+                        <div class="student-item">7. Keiji Tomura</div>
+                        <div class="student-item">8. Mio Hanazawa</div>
+                        <div class="student-item">9. Daigo Kiryu</div>
+                        <div class="student-item">10. Satsuki Yamada</div>
+                        <div class="student-item">11. Ren Hayasaka</div>
+                        <div class="student-item">12. Hiyori Anzai</div>
+                        <div class="student-item">13. Soma Takagi</div>
+                        <div class="student-item">14. Rina Fujisaki</div>
+                        <div class="student-item">15. Kyohei Amano</div>
+                        <div class="student-item">16. Yukina Misaki</div>
+                        <div class="student-item">17. Jun Arakawa</div>
+                        <div class="student-item">18. Mari Aoshima</div>
+                        <div class="student-item">19. Haruki Sendo</div>
+                        <div class="student-item">20. Kokona Itsuki</div>
+                        <div class="student-item">21. Yuya Shimizu</div>
+                        <div class="student-item">22. Riko Amatsuka</div>
+                        <div class="student-item">23. Shunpei Morino</div>
+                        <div class="student-item">24. Airi Takanashi</div>
+                        <div class="student-item">25. Haiga Kayline</div>
+                        <div class="student-item">26. Naoe Hoshikawa</div>
+                        <div class="student-item">27. Kento Masuda</div>
+                        <div class="student-item">28. Mio Uehara</div>
+                        <div class="student-item">29. Rui Kamiyama</div>
+                        <div class="student-item">30. Ayane Momoka</div>
+                        <div class="student-item">31. Reiji Akeno</div>
+                        <div class="student-item">32. Eri Sasaki</div>
+                        <div class="student-item">33. Toma Shinoda</div>
+                        <div class="student-item">34. Mayu Kisaragi</div>
+                        <div class="student-item">35. Kaito Rindou</div>
+                        <div class="student-item">36. Nozomi Haruka</div>
+                        <div class="student-item">37. Yuto Tanigawa</div>
+                        <div class="student-item">38. Hina Kisaragi</div>
+                        <div class="student-item">39. Ren Aozora</div>
+                        <div class="student-item">40. Kanna Tsukishiro</div>
+                        <div class="student-item">41. Yuji Tachibana</div>
+                        <div class="student-item">42. Ayase Naomi</div>
+                        <div class="student-item">43. Shin Arimura</div>
+                        <div class="student-item">44. Saki Haneda</div>
+                        <div class="student-item">45. Makoto Kusunoki</div>
+                        <div class="student-item">46. Mio Sakuraba</div>
+                        <div class="student-item">47. Kenta Yoshida</div>
+                        <div class="student-item">48. Reina Kuroe</div>
+                        <div class="student-item">49. Hiroto Kaede</div>
+                        <div class="student-item">50. Ami Sugawara</div>
+                        <div class="student-item">51. Kyo Morisaki</div>
+                        <div class="student-item">52. Chihiro Nanase</div>
+                        <div class="student-item">53. Daichi Kazama</div>
+                        <div class="student-item">54. Aiko Hoshimiya</div>
+                        <div class="student-item">55. Takumi Rindo</div>
+                        <div class="student-item">56. Ayame Shiratori</div>
+                        <div class="student-item">57. Sho Yagami</div>
+                        <div class="student-item">58. Kanae Itsuka</div>
+                        <div class="student-item">59. Sota Kamiyu</div>
+                        <div class="student-item">60. Misora Tenmei</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class-section">
+                <div class="class-header" onclick="toggleClass('class3')">
+                    <h3>KELAS 3</h3>
+                    <span>▼</span>
+                </div>
+                <div class="class-content" id="class3">
+                    <div class="students-grid">
+                        <div class="student-item">1. Haruto Mizuki </div>
+                        <div class="student-item">2. Ayaka Kisaragi </div>
+                        <div class="student-item">3. Natsumi Rena </div>
+                        <div class="student-item">4. Shou Akeno</div>
+                        <div class="student-item">5. Kaito Hoshino </div>
+                        <div class="student-item">6. Miyu Hanabira</div>
+                        <div class="student-item">7. Tsubasa Ren</div>
+                        <div class="student-item">8. Rina Komatsu</div>
+                        <div class="student-item">9. Yuto Kagami</div>
+                        <div class="student-item">10. Rumi Takahata</div>
+                        <div class="student-item">11. Hiroshi Shindo</div>
+                        <div class="student-item">12. Ema Kirisaki</div>
+                        <div class="student-item">13. Taiga Minato</div>
+                        <div class="student-item">14. Hina Kuroba</div>
+                        <div class="student-item">15. Aoi Kasumi</div>
+                        <div class="student-item">16. Itsuki Watanabe</div>
+                        <div class="student-item">17. Mei Tachibana</div>
+                        <div class="student-item">18. Renji Sato</div>
+                        <div class="student-item">19. Airi Shion</div>
+                        <div class="student-item">20. Daichi Hayama</div>
+                        <div class="student-item">21. Kenta Arai</div>
+                        <div class="student-item">22. Deez</div>
+                        <div class="student-item">23. Yui Kanzaki</div>
+                        <div class="student-item">24. Shun Kuroda</div>
+                        <div class="student-item">25. Akari Hoshino</div>
+                        <div class="student-item">26. Toma Nishikawa</div>
+                        <div class="student-item">27. Noa Hoshizaki</div>
+                        <div class="student-item">28. Yume Arisaka</div>
+                        <div class="student-item">29. Saki Endo</div>
+                        <div class="student-item">30. Kazuki Morita</div>
+                        <div class="student-item">31. Keita Moriyama</div>
+                        <div class="student-item">32. Moe Shimizu</div>
+                        <div class="student-item">33. Ayumi Kinoshita</div>
+                        <div class="student-item">34. Nia</div>
+                        <div class="student-item">35. Chika Ayase</div>
+                        <div class="student-item">36. Minori Asano</div>
+                        <div class="student-item">37. Kazuya Hino</div>
+                        <div class="student-item">38. Ryohei Nagisa</div>
+                        <div class="student-item">39. Shohei Minagawa</div>
+                        <div class="student-item">40. Haruka Yamane</div>
+                        <div class="student-item">41. Naoki Himura</div>
+                        <div class="student-item">42. Sakura Ichinose</div>
+                        <div class="student-item">43. Ami Takahara</div>
+                        <div class="student-item">44. Eiji Kurosawa</div>
+                        <div class="student-item">45. Rina Fujisaki</div>
+                        <div class="student-item">46. Haruki Sendo</div>
+                        <div class="student-item">47. Mari Aoshima</div>
+                        <div class="student-item">48. Kento Masuda</div>
+                        <div class="student-item">49. Mio Hanazawa</div>
+                        <div class="student-item">50. Kyohei Amano</div>
+                        <div class="student-item">51. Yukina Misaki</div>
+                        <div class="student-item">52. Shion Ayabane</div>
+                        <div class="student-item">53. Akito Naruse</div>
+                        <div class="student-item">54. Rin Sakurai</div>
+                        <div class="student-item">55. Daigo Kiryu</div>
+                        <div class="student-item">56. Hiyori Anzai</div>
+                        <div class="student-item">57. Soma Takagi</div>
+                        <div class="student-item">58. Mizuki Haruna</div>
+                        <div class="student-item">59. Arisa Nanami</div>
+                        <div class="student-item">60. Takeru Fujinami</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary-section">
+            <h2>📊 Rekap Jumlah Siswa</h2>
+            <div class="summary-box">
+                <h3>📚 Rekap Jumlah</h3>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Kelas</th>
+                            <th>Laki-Laki</th>
+                            <th>Perempuan</th>
+                            <th>Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Kelas 1</strong></td>
+                            <td>32</td>
+                            <td>28</td>
+                            <td>60</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kelas 2</strong></td>
+                            <td>31</td>
+                            <td>29</td>
+                            <td>60</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kelas 3</strong></td>
+                            <td>30</td>
+                            <td>30</td>
+                            <td>60</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong>93</strong></td>
+                            <td><strong>87</strong></td>
+                            <td><strong>180</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="total-highlight">
+                    Total Siswa Vezuria Academy: 180 Siswa
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Vezuria Academy. All Rights Reserved.</p>
+        <p>Bersama Vezuria Academy, belajar bukan sekadar mencari ilmu – tetapi membangun masa depan yang lebih baik.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('nav-menu');
+            nav.classList.toggle('active');
+        }
+
+        function toggleClass(classId) {
+            const content = document.getElementById(classId);
+            content.classList.toggle('active');
+        }
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('nav-menu').classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
